@@ -1,7 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,6 +23,7 @@ namespace server.Controllers
         }
 
         // GET: api/Channels
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Channel>>> GetChannels()
         {
@@ -29,6 +31,7 @@ namespace server.Controllers
         }
 
         // GET: api/Channels/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Channel>> GetChannel(int id)
         {
@@ -43,8 +46,7 @@ namespace server.Controllers
         }
 
         // PUT: api/Channels/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutChannel(int id, Channel channel)
         {
@@ -75,8 +77,7 @@ namespace server.Controllers
         }
 
         // POST: api/Channels
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Channel>> PostChannel(Channel channel)
         {
@@ -87,6 +88,7 @@ namespace server.Controllers
         }
 
         // DELETE: api/Channels/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<Channel>> DeleteChannel(int id)
         {

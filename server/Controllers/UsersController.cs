@@ -1,12 +1,16 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using server;
 using server.Models;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace server.Controllers
 {
@@ -22,6 +26,7 @@ namespace server.Controllers
         }
 
         // GET: api/Users
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -29,6 +34,7 @@ namespace server.Controllers
         }
 
         // GET: api/Users/5
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -43,8 +49,7 @@ namespace server.Controllers
         }
 
         // PUT: api/Users/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
@@ -75,18 +80,21 @@ namespace server.Controllers
         }
 
         // POST: api/Users
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<User>> PostUser(string usermane, string password)
         {
+            User user = new User{
+                Login = usermane,
+                Password = password
+            };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.IdUser }, user);
+            return CreatedAtAction(nameof(Token), new { usermane, password }, user);
         }
 
         // DELETE: api/Users/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
@@ -105,6 +113,52 @@ namespace server.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.IdUser == id);
+        }
+
+        [HttpPost("/token")]
+        public Object Token(string username, string password)
+        {
+            var identity = GetIdentity(username, password);
+            if (identity == null)
+            {
+                return BadRequest(new { errorText = "Invalid username or password." });
+            }
+
+            var now = DateTime.UtcNow;
+            // создаем JWT-токен
+            var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.ISSUER,
+                    audience: AuthOptions.AUDIENCE,
+                    notBefore: now,
+                    claims: identity.Claims,
+                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            var response = new
+            {
+                access_token = encodedJwt,
+                username = identity.Name
+            };
+
+            return response;
+        }
+
+        private ClaimsIdentity GetIdentity(string username, string password)
+        {
+            User person = _context.Users.FirstOrDefault(x => x.Login == username && x.Password == password);
+            if (person != null)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login)
+                };
+                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token");
+                return claimsIdentity;
+            }
+
+            // если пользователя не найдено
+            return null;
         }
     }
 }
