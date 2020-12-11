@@ -1,0 +1,16 @@
+<div class="form-group">
+  <form [formGroup]="form">
+
+    <label>
+      Login:
+      <input type="text" formControlName="login" />
+    </label>
+
+    <label>
+      Password:
+      <input type="text" formControlName="password" />
+    </label>
+
+    <button type="submit" [disabled]="!form.valid" (click)="register()">Register</button>
+  </form>
+</div>

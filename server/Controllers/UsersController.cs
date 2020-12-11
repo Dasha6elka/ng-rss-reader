@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using server;
 using server.Models;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
@@ -79,18 +77,26 @@ namespace server.Controllers
             return NoContent();
         }
 
-        // POST: api/Users
-        [HttpPost]
-        public async Task<ActionResult<User>> PostUser(string usermane, string password)
+        // POST: api/Users/register
+        [HttpPost("register")]
+        public async Task<ActionResult<object>> PostUser(DTO.UserDTO dto)
         {
-            User user = new User{
-                Login = usermane,
-                Password = password
+            var settings = new Settings
+            {
+                DarkTheme = false
+            };
+            var entity = _context.Settings.Add(settings);
+            await _context.SaveChangesAsync();
+
+            var user = new User {
+                Login = dto.Username,
+                Password = dto.Password,
+                IdSettings = entity.Entity.IdSettings
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(Token), new { usermane, password }, user);
+            return await GenerateToken(dto);
         }
 
         // DELETE: api/Users/5
@@ -115,16 +121,23 @@ namespace server.Controllers
             return _context.Users.Any(e => e.IdUser == id);
         }
 
-        [HttpPost("/token")]
-        public Object Token(string username, string password)
+        // POST: api/Users/token
+        [HttpPost("token")]
+        public async Task<ActionResult<object>> Token(DTO.UserDTO dto)
         {
-            var identity = GetIdentity(username, password);
+            return await GenerateToken(dto);
+        }
+
+        private async Task<ActionResult<object>> GenerateToken(DTO.UserDTO dto)
+        {
+            var identity = await GetIdentity(dto.Username, dto.Password);
             if (identity == null)
             {
-                return BadRequest(new { errorText = "Invalid username or password." });
+                return BadRequest(new { errorText = "Invalid username or password" });
             }
 
             var now = DateTime.UtcNow;
+
             // создаем JWT-токен
             var jwt = new JwtSecurityToken(
                     issuer: AuthOptions.ISSUER,
@@ -133,28 +146,30 @@ namespace server.Controllers
                     claims: identity.Claims,
                     expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LIFETIME)),
                     signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
 
             var response = new
             {
-                access_token = encodedJwt,
+                access_token = token,
                 username = identity.Name
             };
 
             return response;
         }
 
-        private ClaimsIdentity GetIdentity(string username, string password)
+        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
         {
-            User person = _context.Users.FirstOrDefault(x => x.Login == username && x.Password == password);
+            var person = await _context.Users.Where(x => x.Login == username && x.Password == password).FirstOrDefaultAsync();
+
             if (person != null)
             {
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login)
                 };
-                ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, "Token");
-                return claimsIdentity;
+
+                return new ClaimsIdentity(claims, "Token");
             }
 
             // если пользователя не найдено

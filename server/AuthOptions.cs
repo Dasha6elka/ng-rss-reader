@@ -7,8 +7,9 @@ namespace server
     {
         public const string ISSUER = "MyAuthServer";
         public const string AUDIENCE = "MyAuthClient";
-        const string KEY = "mysupersecret_secretkey!123";
-        public const int LIFETIME = 1;
+        public const string KEY = "yQqJE6uMiYmLifRUgxnly3I5JGX3p2YP";
+
+        public const int LIFETIME = 1 * 60 * 24;
 
         public static SymmetricSecurityKey GetSymmetricSecurityKey()
         {
