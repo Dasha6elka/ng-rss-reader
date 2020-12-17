@@ -20,6 +20,6 @@ export class AuthComponent implements OnInit {
   signIn() {
     const values = this.form.value;
 
-    this.authService.login(values.login, values.password).subscribe(() => alert("Successfully logged!"));
+    this.authService.login(values.login, values.password).subscribe();
   }
 }

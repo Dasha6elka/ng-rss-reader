@@ -1,12 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using server;
 using server.Models;
 
 namespace server.Controllers
@@ -79,12 +76,18 @@ namespace server.Controllers
         // POST: api/Channels
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Channel>> PostChannel(Channel channel)
+        public async Task<ActionResult<object>> PostChannel(DTO.ChannelDTO dto)
         {
+            var channel = new Channel {
+                Name = dto.Channel,
+                Link = dto.Link,
+                IdUser = int.Parse(User.Identity.Name),
+            };
+
             _context.Channels.Add(channel);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetChannel", new { id = channel.IdChannel }, channel);
+            return new { IdChannel = channel.IdChannel, Name = channel.Name, Link = channel.Link };
         }
 
         // DELETE: api/Channels/5

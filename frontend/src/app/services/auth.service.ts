@@ -12,14 +12,14 @@ export class AuthService {
 
   private auth(username: string, password: string, path: string) {
     return this.httpClient
-      .post<{ access_token: string; username: string }>(path, {
+      .post<{ access_token: string; user_id: string }>(path, {
         username,
         password,
       })
       .pipe(
         tap((result) => {
           localStorage.setItem('access_token', result.access_token);
-          localStorage.setItem('username', result.username);
+          localStorage.setItem('user_id', result.user_id);
         })
       );
   }
@@ -34,7 +34,7 @@ export class AuthService {
 
   isAuthed() {
     return (
-      localStorage.getItem('access_token') && localStorage.getItem('username')
+      localStorage.getItem('access_token') && localStorage.getItem('user_id')
     );
   }
 }

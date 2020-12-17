@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -23,5 +23,12 @@ namespace server.Models
         [Column("link")]
         [StringLength(255)]
         public string Link { get; set; }
+
+        [Required]
+        [Column("id_user")]
+        public int IdUser { get; set; }
+
+        [ForeignKey(nameof(IdUser))]
+        public virtual User User { get; set; }
     }
 }

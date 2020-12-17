@@ -1,0 +1,12 @@
+<form [formGroup]="form">
+  <label
+    >Channel name:
+    <input type="text" formControlName="channel" required />
+  </label>
+  <label
+    >RSS link:
+    <input type="text" formControlName="link" required />
+  </label>
+
+  <button type="submit" [disabled]="!form.valid" (click)="add()">Add</button>
+</form>

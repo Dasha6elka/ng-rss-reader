@@ -81,17 +81,9 @@ namespace server.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<object>> PostUser(DTO.UserDTO dto)
         {
-            var settings = new Settings
-            {
-                DarkTheme = false
-            };
-            var entity = _context.Settings.Add(settings);
-            await _context.SaveChangesAsync();
-
             var user = new User {
                 Login = dto.Username,
-                Password = dto.Password,
-                IdSettings = entity.Entity.IdSettings
+                Password = dto.Password
             };
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -130,7 +122,7 @@ namespace server.Controllers
 
         private async Task<ActionResult<object>> GenerateToken(DTO.UserDTO dto)
         {
-            var identity = await GetIdentity(dto.Username, dto.Password);
+            var (identity, person) = await GetIdentity(dto.Username, dto.Password);
             if (identity == null)
             {
                 return BadRequest(new { errorText = "Invalid username or password" });
@@ -152,13 +144,13 @@ namespace server.Controllers
             var response = new
             {
                 access_token = token,
-                username = identity.Name
+                user_id = identity.Name,
             };
 
             return response;
         }
 
-        private async Task<ClaimsIdentity> GetIdentity(string username, string password)
+        private async Task<ValueTuple<ClaimsIdentity, User>> GetIdentity(string username, string password)
         {
             var person = await _context.Users.Where(x => x.Login == username && x.Password == password).FirstOrDefaultAsync();
 
@@ -166,14 +158,14 @@ namespace server.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.Login)
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, person.IdUser.ToString())
                 };
 
-                return new ClaimsIdentity(claims, "Token");
+                return (new ClaimsIdentity(claims, "Token"), person);
             }
 
             // если пользователя не найдено
-            return null;
+            return (null, person);
         }
     }
 }

@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { RegistrationComponent } from './registration/registration.component';
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   imports: [
@@ -15,10 +16,16 @@ import { RegistrationComponent } from './registration/registration.component';
     RouterModule.forRoot([
       { path: 'sign-in', component: AuthComponent },
       { path: 'sign-up', component: RegistrationComponent },
+      { path: 'profile', component: ProfileComponent },
     ]),
     HttpClientModule,
   ],
-  declarations: [AppComponent, RegistrationComponent, AuthComponent],
+  declarations: [
+    AppComponent,
+    RegistrationComponent,
+    AuthComponent,
+    ProfileComponent,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

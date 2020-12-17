@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,10 +25,7 @@ namespace server.Models
         public string Password { get; set; }
 
         [Required]
-        [Column("id_settings")]
-        public int IdSettings { get; set; }
-
-        [ForeignKey(nameof(IdSettings))]
-        public virtual Settings Settings { get; set; }
+        [Column("dark_theme")]
+        public bool DarkTheme { get; set; }
     }
 }
