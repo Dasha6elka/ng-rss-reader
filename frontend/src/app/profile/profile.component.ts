@@ -13,13 +13,21 @@ export class ProfileComponent implements OnInit {
     link: new FormControl(''),
   });
 
+  channels: Array<{ id: number; channel: string; link: string }> = [];
+
   constructor(private channelService: ChannelService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.channelService.getAll().subscribe((response) => {
+      this.channels.push(...response);
+    });
+  }
 
   add() {
     var values = this.form.value;
 
-    this.channelService.add(values.channel, values.link).subscribe();
+    this.channelService.add(values.channel, values.link).subscribe(response => {
+      this.channels.push(response);
+    });
   }
 }

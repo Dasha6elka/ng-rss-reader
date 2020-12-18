@@ -10,3 +10,8 @@
 
   <button type="submit" [disabled]="!form.valid" (click)="add()">Add</button>
 </form>
+
+<div *ngFor="let channel of channels">
+  <div>{{ channel.channel }}</div>
+  <div>{{ channel.link }}</div>
+</div>

@@ -22,9 +22,12 @@ namespace server.Controllers
         // GET: api/Channels
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Channel>>> GetChannels()
+        public async Task<ActionResult<IEnumerable<object>>> GetChannels()
         {
-            return await _context.Channels.ToListAsync();
+            return await _context.Channels
+                .Where(x => x.IdUser == int.Parse(User.Identity.Name))
+                .Select(x => new { Id = x.IdChannel, Channel = x.Name, Link = x.Link })
+                .ToListAsync();
         }
 
         // GET: api/Channels/5
@@ -78,7 +81,8 @@ namespace server.Controllers
         [HttpPost]
         public async Task<ActionResult<object>> PostChannel(DTO.ChannelDTO dto)
         {
-            var channel = new Channel {
+            var channel = new Channel
+            {
                 Name = dto.Channel,
                 Link = dto.Link,
                 IdUser = int.Parse(User.Identity.Name),
@@ -87,7 +91,7 @@ namespace server.Controllers
             _context.Channels.Add(channel);
             await _context.SaveChangesAsync();
 
-            return new { IdChannel = channel.IdChannel, Name = channel.Name, Link = channel.Link };
+            return new { Id = channel.IdChannel, Channel = channel.Name, Link = channel.Link };
         }
 
         // DELETE: api/Channels/5

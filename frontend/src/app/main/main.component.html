@@ -1,0 +1,7 @@
+<div *ngFor="let feed of feeds">
+  <div>{{feed.title}}</div>
+  <div *ngFor="let item of feed.items">
+    <div>{{item.title}}</div>
+    <div [innerHTML]="item.content"></div>
+  </div>
+</div>

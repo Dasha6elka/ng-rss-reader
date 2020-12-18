@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { AuthComponent } from './auth/auth.component';
 import { RegistrationComponent } from './registration/registration.component';
 import { ProfileComponent } from './profile/profile.component';
+import { MainComponent } from './main/main.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { ProfileComponent } from './profile/profile.component';
       { path: 'sign-in', component: AuthComponent },
       { path: 'sign-up', component: RegistrationComponent },
       { path: 'profile', component: ProfileComponent },
+      { path: 'main', component: MainComponent }
     ]),
     HttpClientModule,
   ],
@@ -25,6 +27,7 @@ import { ProfileComponent } from './profile/profile.component';
     RegistrationComponent,
     AuthComponent,
     ProfileComponent,
+    MainComponent,
   ],
   bootstrap: [AppComponent],
 })

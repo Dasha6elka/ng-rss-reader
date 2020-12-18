@@ -11,8 +11,8 @@ export class ChannelService {
 
   add(channel: string, link: string) {
     return this.httpClient.post<{
-      IdChannel: number;
-      Name: string;
+      id: number;
+      channel: string;
       link: string;
     }>(
       `${this.PATH}/api/channels`,
@@ -23,5 +23,19 @@ export class ChannelService {
         },
       }
     );
+  }
+
+  getAll() {
+    return this.httpClient.get<
+      Array<{
+        id: number;
+        channel: string;
+        link: string;
+      }>
+    >(`${this.PATH}/api/channels`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    });
   }
 }
