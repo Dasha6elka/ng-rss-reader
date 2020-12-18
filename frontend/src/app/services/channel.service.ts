@@ -25,6 +25,14 @@ export class ChannelService {
     );
   }
 
+  remove(id: number) {
+    return this.httpClient.delete(`${this.PATH}/api/channels/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+    });
+  }
+
   getAll() {
     return this.httpClient.get<
       Array<{

@@ -26,8 +26,16 @@ export class ProfileComponent implements OnInit {
   add() {
     var values = this.form.value;
 
-    this.channelService.add(values.channel, values.link).subscribe(response => {
-      this.channels.push(response);
+    this.channelService
+      .add(values.channel, values.link)
+      .subscribe((response) => {
+        this.channels.push(response);
+      });
+  }
+
+  remove(id: number) {
+    this.channelService.remove(id).subscribe(() => {
+      this.channels = this.channels.filter((channel) => channel.id !== id);
     });
   }
 }

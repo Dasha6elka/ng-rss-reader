@@ -14,4 +14,5 @@
 <div *ngFor="let channel of channels">
   <div>{{ channel.channel }}</div>
   <div>{{ channel.link }}</div>
+  <button type="submit" (click)="remove(channel.id)">Delete</button>
 </div>
