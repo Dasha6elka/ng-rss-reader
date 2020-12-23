@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 
 @Component({
@@ -13,13 +14,15 @@ export class RegistrationComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit() {}
 
   register() {
     const values = this.form.value;
 
-    return this.authService.register(values.login, values.password).subscribe();
+    return this.authService.register(values.login, values.password).subscribe(() => {
+      this.router.navigateByUrl('/');
+    });
   }
 }
