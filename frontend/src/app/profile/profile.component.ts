@@ -38,7 +38,10 @@ export class ProfileComponent implements OnInit {
       });
   }
 
-  update(id: number, visible: boolean) {
+  update(id: number, event: MouseEvent) {
+    const target = event.target as HTMLInputElement;
+    const visible = target.checked;
+
     const channel = this.channels.find((channel) => channel.id === id);
 
     if (channel) {

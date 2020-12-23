@@ -12,7 +12,7 @@
 </form>
 
 <div *ngFor="let channel of channels">
-  <input type="checkbox" [defaultChecked]="channel.visible" (click)="update(channel.id, $event.target.checked)" >
+  <input type="checkbox" [defaultChecked]="channel.visible" (click)="update(channel.id, $event)" >
   <div>{{ channel.channel }}</div>
   <div>{{ channel.link }}</div>
   <button type="submit" (click)="remove(channel.id)">Delete</button>
