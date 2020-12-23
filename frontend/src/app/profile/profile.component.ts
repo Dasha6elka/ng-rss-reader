@@ -13,7 +13,12 @@ export class ProfileComponent implements OnInit {
     link: new FormControl(''),
   });
 
-  channels: Array<{ id: number; channel: string; link: string }> = [];
+  channels: Array<{
+    id: number;
+    channel: string;
+    link: string;
+    visible: boolean;
+  }> = [];
 
   constructor(private channelService: ChannelService) {}
 
@@ -31,6 +36,16 @@ export class ProfileComponent implements OnInit {
       .subscribe((response) => {
         this.channels.push(response);
       });
+  }
+
+  update(id: number, visible: boolean) {
+    const channel = this.channels.find((channel) => channel.id === id);
+
+    if (channel) {
+      this.channelService.update({ ...channel, visible }).subscribe(() => {
+        channel.visible = visible;
+      });
+    }
   }
 
   remove(id: number) {

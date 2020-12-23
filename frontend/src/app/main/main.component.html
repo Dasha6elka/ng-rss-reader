@@ -1,7 +1,11 @@
-<div *ngFor="let feed of feeds">
-  <div>{{feed.title}}</div>
+<div *ngFor="let feed of feeds; index as i">
+  <h1>{{ feed.title }}</h1>
   <div *ngFor="let item of feed.items">
-    <div>{{item.title}}</div>
+    <h2>{{ item.title }}</h2>
+    <div *ngIf="item.enclosure">
+      <img alt="enclosure" [src]="item.enclosure?.url" />
+    </div>
     <div [innerHTML]="item.content"></div>
   </div>
+  <hr *ngIf="feeds.length > 1 && i !== feeds.length - 1" />
 </div>

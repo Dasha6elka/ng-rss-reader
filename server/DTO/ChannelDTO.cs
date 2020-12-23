@@ -4,5 +4,7 @@ namespace server.DTO
     {
         public string Channel { get; set; }
         public string Link { get; set; }
+
+        public bool Visible { get; set; }
     }
 }

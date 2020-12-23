@@ -24,17 +24,17 @@ export class MainComponent implements OnInit {
   constructor(private channelService: ChannelService) {}
 
   ngOnInit(): void {
-    this.channelService.getAll().subscribe((response) => {
+    this.channelService.getAll().subscribe(async (response) => {
       this.channels.push(...response);
-      response.forEach((channel) => {
-        this.parser.parseURL(CORS_PROXY + channel.link, (error, feed) => {
-          if (error) {
-            console.error(error);
-          } else {
-            this.feeds.push(feed);
-          }
-        });
-      });
+
+      for (const channel of response) {
+        try {
+          const feed = await this.parser.parseURL(CORS_PROXY + channel.link);
+          this.feeds.push(feed);
+        } catch (error) {
+          console.error(error);
+        }
+      }
     });
   }
 }

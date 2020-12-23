@@ -18,7 +18,7 @@ import { MainComponent } from './main/main.component';
       { path: 'sign-in', component: AuthComponent },
       { path: 'sign-up', component: RegistrationComponent },
       { path: 'profile', component: ProfileComponent },
-      { path: 'main', component: MainComponent }
+      { path: '**', component: MainComponent }
     ]),
     HttpClientModule,
   ],

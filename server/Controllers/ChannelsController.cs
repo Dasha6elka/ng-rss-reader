@@ -26,7 +26,7 @@ namespace server.Controllers
         {
             return await _context.Channels
                 .Where(x => x.IdUser == int.Parse(User.Identity.Name))
-                .Select(x => new { Id = x.IdChannel, Channel = x.Name, Link = x.Link })
+                .Select(x => new { Id = x.IdChannel, Channel = x.Name, Link = x.Link, Visible = x.Visible })
                 .ToListAsync();
         }
 
@@ -48,12 +48,28 @@ namespace server.Controllers
         // PUT: api/Channels/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutChannel(int id, Channel channel)
+        public async Task<IActionResult> PutChannel(int id, DTO.ChannelDTO dto)
         {
+            var channel = await _context.Channels.FindAsync(id);
+
+            if (channel == null)
+            {
+                return NotFound();
+            }
+
+            if (channel.IdUser != int.Parse(User.Identity.Name))
+            {
+                return Forbid();
+            }
+
             if (id != channel.IdChannel)
             {
                 return BadRequest();
             }
+
+            channel.Name = dto.Channel;
+            channel.Link = dto.Link;
+            channel.Visible = dto.Visible;
 
             _context.Entry(channel).State = EntityState.Modified;
 
@@ -86,12 +102,13 @@ namespace server.Controllers
                 Name = dto.Channel,
                 Link = dto.Link,
                 IdUser = int.Parse(User.Identity.Name),
+                Visible = true,
             };
 
             _context.Channels.Add(channel);
             await _context.SaveChangesAsync();
 
-            return new { Id = channel.IdChannel, Channel = channel.Name, Link = channel.Link };
+            return new { Id = channel.IdChannel, Channel = channel.Name, Link = channel.Link, Visible = channel.Visible };
         }
 
         // DELETE: api/Channels/5

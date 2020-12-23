@@ -14,6 +14,7 @@ export class ChannelService {
       id: number;
       channel: string;
       link: string;
+      visible: boolean;
     }>(
       `${this.PATH}/api/channels`,
       { channel, link },
@@ -21,6 +22,24 @@ export class ChannelService {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`,
         },
+      }
+    );
+  }
+
+  update(channel: {
+    id: number;
+    channel: string;
+    link: string;
+    visible: boolean;
+  }) {
+    return this.httpClient.request(
+      'PUT',
+      `${this.PATH}/api/channels/${channel.id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: channel,
       }
     );
   }
@@ -39,6 +58,7 @@ export class ChannelService {
         id: number;
         channel: string;
         link: string;
+        visible: boolean;
       }>
     >(`${this.PATH}/api/channels`, {
       headers: {

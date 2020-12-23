@@ -22,6 +22,9 @@ namespace server.Models
         [StringLength(255)]
         public string Link { get; set; }
 
+        [Column("visible")]
+        public bool Visible { get; set; }
+
         [Required]
         [Column("id_user")]
         public int IdUser { get; set; }
