@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 @Injectable({
@@ -8,7 +9,13 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
   private readonly PATH = 'http://localhost:5000';
 
-  constructor(private httpClient: HttpClient) {}
+  loggedIn$ = new BehaviorSubject<boolean>(false);
+
+  constructor(private httpClient: HttpClient) {
+    if (this.isAuthed()) {
+      this.loggedIn$.next(true);
+    }
+  }
 
   private auth(username: string, password: string, path: string) {
     return this.httpClient
@@ -20,6 +27,8 @@ export class AuthService {
         tap((result) => {
           localStorage.setItem('access_token', result.access_token);
           localStorage.setItem('user_id', result.user_id);
+
+          this.loggedIn$.next(true);
         })
       );
   }
