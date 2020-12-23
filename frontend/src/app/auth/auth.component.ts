@@ -25,4 +25,8 @@ export class AuthComponent implements OnInit {
       this.router.navigateByUrl('/');
     });
   }
+
+  signUp() {
+    this.router.navigateByUrl('/sign-up');
+  }
 }

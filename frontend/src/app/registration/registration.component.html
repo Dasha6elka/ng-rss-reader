@@ -9,7 +9,11 @@
     <input type="password" formControlName="password" />
   </label>
 
-  <button type="submit" [disabled]="!form.valid" (click)="register()">
-    Register
+  <button type="submit" [disabled]="!form.valid" (click)="signUp()">
+    Sign Up
+  </button>
+
+  <button type="submit" [disabled]="!form.valid" (click)="signIn()">
+    Sign In
   </button>
 </form>

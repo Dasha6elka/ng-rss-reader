@@ -18,11 +18,15 @@ export class RegistrationComponent implements OnInit {
 
   ngOnInit() {}
 
-  register() {
+  signUp() {
     const values = this.form.value;
 
     return this.authService.register(values.login, values.password).subscribe(() => {
       this.router.navigateByUrl('/');
     });
+  }
+
+  signIn() {
+    this.router.navigateByUrl('/sign-in');
   }
 }
