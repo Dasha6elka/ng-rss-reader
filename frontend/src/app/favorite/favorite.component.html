@@ -1,0 +1,7 @@
+<div *ngFor="let favorite of favorites">
+  <h3>{{ favorite.title }}</h3>
+  <a [href]="favorite.link" rel="noopener noreferrer" target="_blank">{{
+    favorite.link
+  }}</a>
+  <button type="submit" (click)="deleteFavorite(favorite.id)">Delete</button>
+</div>

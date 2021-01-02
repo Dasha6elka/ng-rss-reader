@@ -11,6 +11,7 @@ import { ProfileComponent } from './profile/profile.component';
 import { MainComponent } from './main/main.component';
 import routes from './routes';
 import { HeaderComponent } from './header/header.component';
+import { FavoriteComponent } from './favorite/favorite.component';
 
 @NgModule({
   imports: [
@@ -26,6 +27,7 @@ import { HeaderComponent } from './header/header.component';
     ProfileComponent,
     MainComponent,
     HeaderComponent,
+    FavoriteComponent,
   ],
   bootstrap: [AppComponent],
 })

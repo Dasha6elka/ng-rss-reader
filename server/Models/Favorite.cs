@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace server.Models
 {
@@ -13,6 +9,11 @@ namespace server.Models
         [Key]
         [Column("id_favorite")]
         public int IdFavorite { get; set; }
+
+        [Column("title")]
+        [StringLength(255)]
+        [Required]
+        public string Title { get; set; }
 
         [Column("link")]
         [StringLength(255)]

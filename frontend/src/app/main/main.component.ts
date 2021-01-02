@@ -1,12 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { ChannelService } from '../services/channel.service';
+import { FavoriteService } from '../services/favorite.service';
 
 const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 interface RSSItem {
   content: string;
-  title: string;
   link: string;
+  title: string;
 }
 
 @Component({
@@ -21,7 +22,7 @@ export class MainComponent implements OnInit {
 
   parser = new RSSParser<object, RSSItem>();
 
-  constructor(private channelService: ChannelService) {}
+  constructor(private channelService: ChannelService, private favoriteService: FavoriteService) {}
 
   ngOnInit(): void {
     this.channelService.getAll().subscribe(async (response) => {
@@ -36,5 +37,9 @@ export class MainComponent implements OnInit {
         }
       }
     });
+  }
+
+  like(itemTitle: string, itemLink: string) {
+    this.favoriteService.add(itemTitle, itemLink).subscribe();
   }
 }

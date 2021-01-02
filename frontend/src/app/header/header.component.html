@@ -1,1 +1,6 @@
-<p *ngIf="loggedIn$ | async">header works!</p>
+<nav *ngIf="loggedIn$ | async">
+  <a routerLink="/" routerLinkActive="active">Home</a>
+  <a routerLink="/favorite" routerLinkActive="active">Favorite</a>
+  <a routerLink="/profile" routerLinkActive="active">Settings</a>
+  <button type="submit" (click)="logOut()">Log out</button>
+</nav>

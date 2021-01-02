@@ -46,4 +46,9 @@ export class AuthService {
       localStorage.getItem('access_token') && localStorage.getItem('user_id')
     );
   }
+
+  logOut() {
+    localStorage.clear();
+    this.loggedIn$.next(false);
+  }
 }

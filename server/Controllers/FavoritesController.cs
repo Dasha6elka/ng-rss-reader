@@ -22,9 +22,12 @@ namespace server.Controllers
         // GET: api/Favorites
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Favorite>>> GetFavorites()
+        public async Task<ActionResult<IEnumerable<object>>> GetFavorites()
         {
-            return await _context.Favorites.ToListAsync();
+            return await _context.Favorites
+                .Where(x => x.IdUser == int.Parse(User.Identity.Name))
+                .Select(x =>new { Id = x.IdFavorite, Link = x.Link, Title = x.Title })
+                .ToListAsync();
         }
 
         // GET: api/Favorites/5
@@ -45,12 +48,22 @@ namespace server.Controllers
         // PUT: api/Favorites/5
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFavorite(int id, Favorite favorite)
+        public async Task<IActionResult> PutFavorite(int id, DTO.FavoriteDTO dto)
         {
+            var favorite = await _context.Favorites.FindAsync(id);
+
+            if (favorite == null)
+            {
+                return NotFound();
+            }
+
             if (id != favorite.IdFavorite)
             {
                 return BadRequest();
             }
+
+            favorite.Link = dto.Link;
+            favorite.Title = dto.Title;
 
             _context.Entry(favorite).State = EntityState.Modified;
 
@@ -76,12 +89,18 @@ namespace server.Controllers
         // POST: api/Favorites
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Favorite>> PostFavorite(Favorite favorite)
+        public async Task<ActionResult<object>> PostFavorite(DTO.FavoriteDTO dto)
         {
+            var favorite = new Favorite
+            {
+                Link = dto.Link,
+                Title = dto.Title,
+                IdUser = int.Parse(User.Identity.Name)
+            };
             _context.Favorites.Add(favorite);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetFavorite", new { id = favorite.IdFavorite }, favorite);
+            return new { Id = favorite.IdFavorite, Link = favorite.Link, Title = favorite.Title };
         }
 
         // DELETE: api/Favorites/5
