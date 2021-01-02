@@ -1,0 +1,17 @@
+:host {
+  display: block;
+}
+
+.channels {
+  display: grid;
+  row-gap: 8px;
+}
+
+.title {
+  text-transform: capitalize;
+}
+
+.link {
+  display: flex;
+  justify-content: space-between;
+}

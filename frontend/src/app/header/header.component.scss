@@ -1,0 +1,21 @@
+:host {
+  display: block;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+
+  width: 1280px;
+  margin: auto;
+}
+
+.links {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+}
+
+button[role="tab"] {
+  width: 72px;
+  user-select: none;
+}

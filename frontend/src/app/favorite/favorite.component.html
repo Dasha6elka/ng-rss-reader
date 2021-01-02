@@ -1,7 +1,15 @@
-<div *ngFor="let favorite of favorites">
-  <h3>{{ favorite.title }}</h3>
-  <a [href]="favorite.link" rel="noopener noreferrer" target="_blank">{{
-    favorite.link
-  }}</a>
-  <button type="submit" (click)="deleteFavorite(favorite.id)">Delete</button>
+<div class="favorites">
+  <div *ngFor="let favorite of favorites" class="window">
+    <div class="title-bar">
+      <div class="title-bar-text">{{ favorite.title }}</div>
+      <div class="title-bar-controls">
+        <button aria-label="Close" (click)="remove(favorite.id)"></button>
+      </div>
+    </div>
+    <div class="window-body">
+      <div>
+        <a [href]="favorite.link" rel="noopener noreferrer" target="_blank">{{ favorite.link }}</a>
+      </div>
+    </div>
+  </div>
 </div>

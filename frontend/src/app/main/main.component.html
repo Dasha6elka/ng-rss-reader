@@ -1,16 +1,34 @@
-<div *ngFor="let feed of feeds; index as i">
-  <h1>{{ feed.title }}</h1>
-  <div *ngFor="let item of feed.items">
-    <h2>
-      <a [href]="item.link" rel="noopener noreferrer" target="_blank">{{
-        item.title
-      }}</a>
-    </h2>
-    <div *ngIf="item.enclosure">
-      <img alt="enclosure" [src]="item.enclosure?.url" />
+<section class="tabs">
+  <menu role="tablist">
+    <button
+      *ngFor="let feed of feeds; index as i"
+      role="tab"
+      aria-controls="tab-B"
+      [attr.aria-controls]="'tab-' + i"
+      [attr.aria-selected]="(selectedFeedId$ | async) === i ? true : null"
+      (click)="select(i)"
+    >
+      {{ feed.title }}
+    </button>
+  </menu>
+  <article
+    class="article"
+    *ngFor="let feed of feeds; index as i"
+    role="tabpanel"
+    [id]="'tab-' + i"
+    [attr.hidden]="(selectedFeedId$ | async) !== i ? true : null"
+  >
+    <div *ngFor="let item of feed.items">
+      <div class="title">
+        <h4 style="margin: 0;">
+          <a [href]="item.link" rel="noopener noreferrer" target="_blank">{{ item.title }}</a>
+        </h4>
+        <button class="like" (click)="like(item.title, item.link)">❤️</button>
+      </div>
+      <div *ngIf="item.enclosure">
+        <img alt="enclosure" [src]="item.enclosure?.url" />
+      </div>
+      <div [innerHTML]="item.content"></div>
     </div>
-    <div [innerHTML]="item.content"></div>
-    <button (click)="like(item.title, item.link)">Like</button>
-  </div>
-  <hr *ngIf="feeds.length > 1 && i !== feeds.length - 1" />
-</div>
+  </article>
+</section>

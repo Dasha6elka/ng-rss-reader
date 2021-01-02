@@ -1,4 +1,4 @@
-<div class="container">
-  <app-header></app-header>
+<app-header></app-header>
+<main class="main" [attr.logged]="loggedIn$ | async">
   <router-outlet></router-outlet>
-</div>
+</main>

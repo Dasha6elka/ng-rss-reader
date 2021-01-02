@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import { ChannelService } from '../services/channel.service';
 import { FavoriteService } from '../services/favorite.service';
 
@@ -16,6 +17,8 @@ interface RSSItem {
   styleUrls: ['./main.component.scss'],
 })
 export class MainComponent implements OnInit {
+  selectedFeedId$ = new BehaviorSubject<number>(0);
+
   channels: Array<{ id: number; channel: string; link: string }> = [];
 
   feeds: Array<Parser.Output<RSSItem>> = [];
@@ -41,5 +44,9 @@ export class MainComponent implements OnInit {
 
   like(itemTitle: string, itemLink: string) {
     this.favoriteService.add(itemTitle, itemLink).subscribe();
+  }
+
+  select(index: number) {
+    this.selectedFeedId$.next(index);
   }
 }

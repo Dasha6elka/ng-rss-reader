@@ -1,0 +1,24 @@
+:host {
+  display: block;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.like {
+  min-width: auto;
+  padding: 4px;
+}
+
+.article {
+  display: grid;
+  row-gap: 64px;
+
+  &[hidden] {
+    display: none;
+  }
+}

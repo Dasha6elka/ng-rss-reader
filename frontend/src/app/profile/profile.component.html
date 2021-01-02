@@ -1,19 +1,46 @@
-<form [formGroup]="form">
-  <label
-    >Channel name:
-    <input type="text" formControlName="channel" required />
-  </label>
-  <label
-    >RSS link:
-    <input type="text" formControlName="link" required />
-  </label>
+<div class="window" style="margin-bottom: 32px;">
+  <div class="title-bar">
+    <div class="title-bar-text">Add new RSS channel</div>
+  </div>
+  <div class="window-body">
+    <article role="tabpanel">
+      <form [formGroup]="form">
+        <div class="field-row-stacked">
+          <label for="channel">Channel name: </label>
+          <input id="channel" type="text" formControlName="channel" required />
+        </div>
+        <div class="field-row-stacked">
+          <label for="link">RSS link: </label>
+          <input id="link" type="text" formControlName="link" required />
+        </div>
+      </form>
+    </article>
+    <section class="field-row" style="justify-content: flex-end;">
+      <button (click)="clear()">Clear</button>
+      <button type="submit" [disabled]="!form.valid" (click)="add()">Add</button>
+    </section>
+  </div>
+</div>
 
-  <button type="submit" [disabled]="!form.valid" (click)="add()">Add</button>
-</form>
-
-<div *ngFor="let channel of channels">
-  <input type="checkbox" [defaultChecked]="channel.visible" (click)="update(channel.id, $event)" >
-  <div>{{ channel.channel }}</div>
-  <div>{{ channel.link }}</div>
-  <button type="submit" (click)="remove(channel.id)">Delete</button>
+<div class="channels">
+  <div *ngFor="let channel of channels" class="window">
+    <div class="title-bar">
+      <div class="title-bar-text title">
+        {{ channel.channel }}
+      </div>
+      <div class="title-bar-controls">
+        <button type="submit" (click)="remove(channel.id)" aria-label="Close" title="Delete"></button>
+      </div>
+    </div>
+    <div class="link window-body">
+      <a [href]="channel.link" rel="noopener noreferrer" target="_blank">{{ channel.link }}</a>
+      <input
+        [id]="'visible-' + channel.id"
+        type="checkbox"
+        [defaultChecked]="channel.visible"
+        (click)="update(channel.id, $event)"
+      />
+      <label [for]="'visible-' + channel.id" style="user-select: none;">Is visible</label>
+    </div>
+  </div>
 </div>

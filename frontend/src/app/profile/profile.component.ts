@@ -31,11 +31,13 @@ export class ProfileComponent implements OnInit {
   add() {
     var values = this.form.value;
 
-    this.channelService
-      .add(values.channel, values.link)
-      .subscribe((response) => {
-        this.channels.push(response);
-      });
+    this.channelService.add(values.channel, values.link).subscribe((response) => {
+      this.channels.push(response);
+    });
+  }
+
+  clear() {
+    this.form.reset();
   }
 
   update(id: number, event: MouseEvent) {

@@ -42,9 +42,7 @@ export class AuthService {
   }
 
   isAuthed() {
-    return (
-      localStorage.getItem('access_token') && localStorage.getItem('user_id')
-    );
+    return localStorage.getItem('access_token') && localStorage.getItem('user_id');
   }
 
   logOut() {

@@ -1,19 +1,18 @@
-<form [formGroup]="form">
-  <label>
-    Login:
-    <input type="text" formControlName="login" />
+<form [formGroup]="form" class="form">
+  <label style="margin-bottom: 8px;">
+    <span style="width: 80px;">Login:</span>
+    <input style="width: 160px;" type="text" formControlName="login" />
   </label>
-
-  <label>
-    Password:
-    <input type="password" formControlName="password" />
+  <label style="margin-bottom: 8px;">
+    <span style="width: 80px;">Password:</span>
+    <input style="width: 160px;" type="password" formControlName="password" />
   </label>
-
-  <button type="submit" [disabled]="!form.valid" (click)="signUp()">
-    Sign Up
-  </button>
-
-  <button type="submit" [disabled]="!form.valid" (click)="signIn()">
-    Sign In
-  </button>
+  <div class="actions">
+    <button type="submit" [disabled]="!form.valid" (click)="signUp()">
+      Sign Up
+    </button>
+    <button type="submit" [disabled]="!form.valid" (click)="signIn()">
+      Sign In
+    </button>
+  </div>
 </form>

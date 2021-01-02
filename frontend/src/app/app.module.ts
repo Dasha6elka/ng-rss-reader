@@ -14,12 +14,7 @@ import { HeaderComponent } from './header/header.component';
 import { FavoriteComponent } from './favorite/favorite.component';
 
 @NgModule({
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    RouterModule.forRoot(routes),
-    HttpClientModule,
-  ],
+  imports: [BrowserModule, ReactiveFormsModule, RouterModule.forRoot(routes), HttpClientModule],
   declarations: [
     AppComponent,
     RegistrationComponent,

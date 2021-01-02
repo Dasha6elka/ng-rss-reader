@@ -17,7 +17,7 @@ export class FavoriteComponent implements OnInit {
     });
   }
 
-  deleteFavorite(id: number) {
+  remove(id: number) {
     this.favoriteService.remove(id).subscribe(() => {
       this.favorites = this.favorites.filter((favorite) => favorite.id !== id);
     });

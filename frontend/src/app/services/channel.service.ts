@@ -26,22 +26,13 @@ export class ChannelService {
     );
   }
 
-  update(channel: {
-    id: number;
-    channel: string;
-    link: string;
-    visible: boolean;
-  }) {
-    return this.httpClient.request(
-      'PUT',
-      `${this.PATH}/api/channels/${channel.id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
-        },
-        body: channel,
-      }
-    );
+  update(channel: { id: number; channel: string; link: string; visible: boolean }) {
+    return this.httpClient.request('PUT', `${this.PATH}/api/channels/${channel.id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+      },
+      body: channel,
+    });
   }
 
   remove(id: number) {

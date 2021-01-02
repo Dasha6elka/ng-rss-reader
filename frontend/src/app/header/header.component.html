@@ -1,6 +1,18 @@
-<nav *ngIf="loggedIn$ | async">
-  <a routerLink="/" routerLinkActive="active">Home</a>
-  <a routerLink="/favorite" routerLinkActive="active">Favorite</a>
-  <a routerLink="/profile" routerLinkActive="active">Settings</a>
-  <button type="submit" (click)="logOut()">Log out</button>
+<nav *ngIf="loggedIn$ | async" class="title-bar">
+  <section class="nav tabs">
+    <menu class="links" role="tablist">
+      <button role="tab" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Home
+      </button>
+      <button role="tab" routerLink="/favorite" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Favorite
+      </button>
+      <button role="tab" routerLink="/profile" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Settings
+      </button>
+    </menu>
+    <div class="title-bar-controls">
+      <button type="submit" (click)="logOut()" aria-label="Close" title="Log Out"></button>
+    </div>
+  </section>
 </nav>

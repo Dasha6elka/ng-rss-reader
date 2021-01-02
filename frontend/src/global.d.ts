@@ -7,7 +7,7 @@ declare namespace Parser {
     readonly 'User-Agent'?: string;
   }
 
-  type CustomFieldItem<U> = keyof U | { keepArray: boolean }
+  type CustomFieldItem<U> = keyof U | { keepArray: boolean };
 
   export interface CustomFields<T, U> {
     readonly feed?: Array<keyof T>;
@@ -48,7 +48,7 @@ declare namespace Parser {
       link?: string;
       url: string;
       title?: string;
-    },
+    };
     link?: string;
     title?: string;
     items: (U & Item)[];
@@ -73,7 +73,7 @@ declare namespace Parser {
 /**
  * Class that handles all parsing or URL, or even XML, RSS feed to JSON.
  */
-declare class RSSParser<T = {[key: string]: any}, U = {[key: string]: any}> {
+declare class RSSParser<T = { [key: string]: any }, U = { [key: string]: any }> {
   /**
    * @param options - Parser options.
    */
@@ -86,10 +86,7 @@ declare class RSSParser<T = {[key: string]: any}, U = {[key: string]: any}> {
    *
    * @returns Promise that has the same Output as the callback.
    */
-  parseString(
-    xml: string,
-    callback?: (err: Error, feed: Parser.Output<U>) => void
-  ): Promise<T & Parser.Output<U>>;
+  parseString(xml: string, callback?: (err: Error, feed: Parser.Output<U>) => void): Promise<T & Parser.Output<U>>;
 
   /**
    * Parse URL content to JSON.
