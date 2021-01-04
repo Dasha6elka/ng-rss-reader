@@ -23,9 +23,5 @@ namespace server.Models
         [Column("password")]
         [StringLength(255)]
         public string Password { get; set; }
-
-        [Required]
-        [Column("dark_theme")]
-        public bool DarkTheme { get; set; }
     }
 }
