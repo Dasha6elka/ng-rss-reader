@@ -2,7 +2,7 @@
 
 @import "~normalize.css";
 
-@import '~ngx-toastr/toastr';
+@import "~ngx-toastr/toastr";
 
 html,
 body {
@@ -17,4 +17,9 @@ body {
 .window,
 .title-bar {
   border-radius: 0;
+}
+
+.empty img {
+  display: block;
+  margin: auto;
 }

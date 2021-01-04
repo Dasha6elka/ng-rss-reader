@@ -16,7 +16,7 @@ export class RegistrationComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) {}
+  constructor(private authService: AuthService, private router: Router, private toastrService: ToastrService) {}
 
   ngOnInit() {}
 
@@ -26,15 +26,15 @@ export class RegistrationComponent implements OnInit {
     return this.authService.register(values.login, values.password).subscribe(
       () => {
         this.router.navigateByUrl('/');
-        this.toastr.success('You have been successfully registered');
+        this.toastrService.success('You have been successfully registered');
       },
       (error: HttpErrorResponse) => {
         const errorText = error.error as string;
         const statusText = error.statusText;
         if (errorText.includes('IX_user_account_login')) {
-          this.toastr.error('This login already exists');
+          this.toastrService.error('This login already exists');
         } else {
-          this.toastr.error(statusText);
+          this.toastrService.error(statusText);
         }
       }
     );

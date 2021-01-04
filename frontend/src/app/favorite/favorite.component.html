@@ -1,4 +1,7 @@
 <div class="favorites">
+  <div *ngIf="!favorites.length" class="empty">
+    <img alt="empty" src="../../assets/empty.png" />
+  </div>
   <div *ngFor="let favorite of favorites" class="window">
     <div class="title-bar">
       <div class="title-bar-text">{{ favorite.title }}</div>

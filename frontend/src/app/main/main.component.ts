@@ -1,4 +1,6 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { BehaviorSubject } from 'rxjs';
 import { ChannelService } from '../services/channel.service';
 import { FavoriteService } from '../services/favorite.service';
@@ -25,7 +27,11 @@ export class MainComponent implements OnInit {
 
   parser = new RSSParser<object, RSSItem>();
 
-  constructor(private channelService: ChannelService, private favoriteService: FavoriteService) {}
+  constructor(
+    private channelService: ChannelService,
+    private favoriteService: FavoriteService,
+    private toastrService: ToastrService
+  ) {}
 
   ngOnInit(): void {
     this.channelService.getAll().subscribe(async (response) => {
@@ -42,8 +48,15 @@ export class MainComponent implements OnInit {
     });
   }
 
-  like(itemTitle: string, itemLink: string) {
-    this.favoriteService.add(itemTitle, itemLink).subscribe();
+  like(title: string, link: string) {
+    this.favoriteService.add(title, link).subscribe(
+      () => {
+        this.toastrService.success(`"${title}" has been successfully favorited`);
+      },
+      (error: HttpErrorResponse) => {
+        this.toastrService.error(error.statusText);
+      }
+    );
   }
 
   select(index: number) {
