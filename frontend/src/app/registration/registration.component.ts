@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
@@ -11,10 +11,40 @@ import { AuthService } from '../services/auth.service';
   styleUrls: ['./registration.component.scss'],
 })
 export class RegistrationComponent implements OnInit {
+  private readonly PASSWORD_MIN_LENGTH = 8;
+  private readonly PASSWORD_REG_EXP = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])');
+
   form = new FormGroup({
-    login: new FormControl(''),
-    password: new FormControl(''),
+    login: new FormControl('', [Validators.required]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(this.PASSWORD_MIN_LENGTH),
+      Validators.pattern(this.PASSWORD_REG_EXP),
+    ]),
   });
+
+  get login() {
+    return this.form.controls.login;
+  }
+
+  get loginErrorsMap() {
+    return {
+      [Validators.required.name]: 'Login is required',
+    };
+  }
+
+  get password() {
+    return this.form.controls.password;
+  }
+
+  get passwordErrorsMap() {
+    return {
+      [Validators.required.name]: 'Password is required',
+      [Validators.minLength.name]: 'Password must be 8 characters or longer',
+      [Validators.pattern.name]:
+        'Password does not match pattern: must contain at least 1 lowercase alphabetical character, must contain at least 1 uppercase alphabetical character, must contain at least 1 numeric character',
+    };
+  }
 
   constructor(private authService: AuthService, private router: Router, private toastrService: ToastrService) {}
 

@@ -1,18 +1,28 @@
-<form [formGroup]="form" class="form">
-  <label style="margin-bottom: 8px;">
-    <span style="width: 80px;">Login:</span>
-    <input style="width: 160px;" type="text" formControlName="login" />
+<form [formGroup]="form" class="form" novalidate>
+  <label style="margin-bottom: 8px">
+    <span style="width: 80px">Login:</span>
+    <div>
+      <input style="width: 160px" type="text" formControlName="login" />
+      <div class="form-error" *ngIf="login?.invalid && (login?.dirty || login?.touched)">
+        <span *ngFor="let error of login?.errors | keyvalue" [title]="loginErrorsMap[error.key]">
+          {{ loginErrorsMap[error.key] }}
+        </span>
+      </div>
+    </div>
   </label>
-  <label style="margin-bottom: 8px;">
-    <span style="width: 80px;">Password:</span>
-    <input style="width: 160px;" type="password" formControlName="password" />
+  <label style="margin-bottom: 8px">
+    <span style="width: 80px">Password:</span>
+    <div>
+      <input style="width: 160px" type="password" formControlName="password" />
+      <div class="form-error" *ngIf="password?.invalid && (password?.dirty || password?.touched)">
+        <span *ngFor="let error of login?.errors | keyvalue" [title]="passwordErrorsMap[error.key]">
+          {{ passwordErrorsMap[error.key] }}
+        </span>
+      </div>
+    </div>
   </label>
   <div class="actions">
-    <button type="submit" [disabled]="!form.valid" (click)="signIn()">
-      Sign In
-    </button>
-    <button type="submit" [disabled]="!form.valid" (click)="signUp()">
-      Sign Up
-    </button>
+    <button type="submit" [disabled]="!form.valid" (click)="signIn()">Sign In</button>
+    <button type="submit" (click)="signUp()">Sign Up</button>
   </div>
 </form>

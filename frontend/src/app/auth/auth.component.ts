@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
@@ -12,9 +12,29 @@ import { AuthService } from '../services/auth.service';
 })
 export class AuthComponent implements OnInit {
   form = new FormGroup({
-    login: new FormControl(''),
-    password: new FormControl(''),
+    login: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required]),
   });
+
+  get login() {
+    return this.form.controls.login;
+  }
+
+  get loginErrorsMap() {
+    return {
+      [Validators.required.name]: 'Login is required',
+    };
+  }
+
+  get password() {
+    return this.form.controls.password;
+  }
+
+  get passwordErrorsMap() {
+    return {
+      [Validators.required.name]: 'Password is required',
+    };
+  }
 
   constructor(private authService: AuthService, private router: Router, private toastrService: ToastrService) {}
 
