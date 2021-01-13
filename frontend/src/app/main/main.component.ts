@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 import { ChannelService } from '../services/channel.service';
 import { FavoriteService } from '../services/favorite.service';
 
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
+const CORS_PROXY = 'https://secret-ocean-49799.herokuapp.com/';
 
 interface RSSItem {
   content: string;
