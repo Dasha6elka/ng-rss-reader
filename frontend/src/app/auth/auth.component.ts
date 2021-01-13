@@ -22,7 +22,7 @@ export class AuthComponent implements OnInit {
 
   get loginErrorsMap() {
     return {
-      [Validators.required.name]: 'Login is required',
+      required: 'Login is required',
     };
   }
 
@@ -32,7 +32,7 @@ export class AuthComponent implements OnInit {
 
   get passwordErrorsMap() {
     return {
-      [Validators.required.name]: 'Password is required',
+      required: 'Password is required',
     };
   }
 

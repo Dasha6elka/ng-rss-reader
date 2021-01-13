@@ -29,19 +29,27 @@ export class RegistrationComponent implements OnInit {
 
   get loginErrorsMap() {
     return {
-      [Validators.required.name]: 'Login is required',
+      required: 'Login is required',
     };
   }
 
   get password() {
-    return this.form.controls.password;
+    return new Proxy(this.form.controls.newPassword, {
+      get(target, key) {
+        if (key === 'errors') {
+          const first = Object.keys(target.errors ?? [])?.[0];
+          return { [first]: target.errors?.[first] };
+        }
+        return target.errors!;
+      },
+    });
   }
 
   get passwordErrorsMap() {
     return {
-      [Validators.required.name]: 'Password is required',
-      [Validators.minLength.name]: 'Password must be 8 characters or longer',
-      [Validators.pattern.name]:
+      required: 'Password is required',
+      minlength: 'Password must be 8 characters or longer',
+      pattern:
         'Password does not match pattern: must contain at least 1 lowercase alphabetical character, must contain at least 1 uppercase alphabetical character, must contain at least 1 numeric character',
     };
   }

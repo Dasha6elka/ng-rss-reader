@@ -1,10 +1,39 @@
-<div class="window" style="margin-bottom: 32px;">
+<div class="window" style="margin-bottom: 32px">
+  <div class="title-bar">
+    <div class="title-bar-text">Update password</div>
+  </div>
+  <div class="window-body">
+    <article role="tabpanel">
+      <form [formGroup]="passwordForm">
+        <div class="field-row-stacked">
+          <label for="password">New password: </label>
+          <input id="password" type="password" formControlName="newPassword" required />
+          <div
+            class="form-error"
+            style="width: auto"
+            *ngIf="password?.invalid && (password?.dirty || password?.touched)"
+          >
+            <span *ngFor="let error of password?.errors | keyvalue" [title]="passwordErrorsMap[error.key]">
+              {{ passwordErrorsMap[error.key] }}.
+            </span>
+          </div>
+        </div>
+      </form>
+    </article>
+    <section class="field-row" style="justify-content: flex-end">
+      <button (click)="clearPassword()">Clear</button>
+      <button type="submit" [disabled]="!passwordForm.valid" (click)="updatePassword()">Update</button>
+    </section>
+  </div>
+</div>
+
+<div class="window" style="margin-bottom: 32px">
   <div class="title-bar">
     <div class="title-bar-text">Add new RSS channel</div>
   </div>
   <div class="window-body">
     <article role="tabpanel">
-      <form [formGroup]="form">
+      <form [formGroup]="channelForm">
         <div class="field-row-stacked">
           <label for="channel">Channel name: </label>
           <input id="channel" type="text" formControlName="channel" required />
@@ -15,9 +44,9 @@
         </div>
       </form>
     </article>
-    <section class="field-row" style="justify-content: flex-end;">
+    <section class="field-row" style="justify-content: flex-end">
       <button (click)="clear()">Clear</button>
-      <button type="submit" [disabled]="!form.valid" (click)="add()">Add</button>
+      <button type="submit" [disabled]="!channelForm.valid" (click)="add()">Add</button>
     </section>
   </div>
 </div>
@@ -40,7 +69,7 @@
         [defaultChecked]="channel.visible"
         (click)="update(channel.id, $event)"
       />
-      <label [for]="'visible-' + channel.id" style="user-select: none;">Is visible</label>
+      <label [for]="'visible-' + channel.id" style="user-select: none">Is visible</label>
     </div>
   </div>
 </div>

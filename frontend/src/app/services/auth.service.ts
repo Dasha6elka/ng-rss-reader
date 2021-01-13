@@ -27,6 +27,7 @@ export class AuthService {
         tap((result) => {
           localStorage.setItem('access_token', result.access_token);
           localStorage.setItem('user_id', result.user_id);
+          localStorage.setItem('user_name', username);
 
           this.loggedIn$.next(true);
         })
@@ -39,6 +40,25 @@ export class AuthService {
 
   register(username: string, password: string) {
     return this.auth(username, password, `${this.PATH}/api/users/register`);
+  }
+
+  updatePassword(password: string) {
+    const userId = localStorage.getItem('user_id');
+    const username = localStorage.getItem('user_name');
+
+    return this.httpClient.put(
+      `${this.PATH}/api/users/${userId}`,
+      {
+        idUser: parseInt(userId!),
+        login: username,
+        password,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      }
+    );
   }
 
   isAuthed() {

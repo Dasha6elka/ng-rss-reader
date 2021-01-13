@@ -1,7 +1,8 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
+import { AuthService } from '../services/auth.service';
 import { ChannelService } from '../services/channel.service';
 
 @Component({
@@ -10,9 +11,19 @@ import { ChannelService } from '../services/channel.service';
   styleUrls: ['./profile.component.scss'],
 })
 export class ProfileComponent implements OnInit {
-  form = new FormGroup({
+  private readonly PASSWORD_MIN_LENGTH = 8;
+  private readonly PASSWORD_REG_EXP = new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])');
+
+  channelForm = new FormGroup({
     channel: new FormControl(''),
     link: new FormControl(''),
+  });
+
+  passwordForm = new FormGroup({
+    newPassword: new FormControl('', [
+      Validators.minLength(this.PASSWORD_MIN_LENGTH),
+      Validators.pattern(this.PASSWORD_REG_EXP),
+    ]),
   });
 
   channels: Array<{
@@ -22,7 +33,31 @@ export class ProfileComponent implements OnInit {
     visible: boolean;
   }> = [];
 
-  constructor(private channelService: ChannelService, private toastrService: ToastrService) {}
+  get password() {
+    return new Proxy(this.passwordForm.controls.newPassword, {
+      get(target, key) {
+        if (key === 'errors') {
+          const first = Object.keys(target.errors ?? [])?.[0];
+          return { [first]: target.errors?.[first] };
+        }
+        return target.errors!;
+      },
+    });
+  }
+
+  get passwordErrorsMap() {
+    return {
+      minlength: 'Password must be 8 characters or longer',
+      pattern:
+        'Password does not match pattern: must contain at least 1 lowercase alphabetical character, must contain at least 1 uppercase alphabetical character, must contain at least 1 numeric character',
+    };
+  }
+
+  constructor(
+    private channelService: ChannelService,
+    private toastrService: ToastrService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
     this.channelService.getAll().subscribe((response) => {
@@ -31,7 +66,7 @@ export class ProfileComponent implements OnInit {
   }
 
   add() {
-    var values = this.form.value;
+    const values = this.channelForm.value;
 
     this.channelService.add(values.channel, values.link).subscribe((response) => {
       this.channels.push(response);
@@ -40,7 +75,11 @@ export class ProfileComponent implements OnInit {
   }
 
   clear() {
-    this.form.reset();
+    this.channelForm.reset();
+  }
+
+  clearPassword() {
+    this.passwordForm.reset();
   }
 
   update(id: number, event: MouseEvent) {
@@ -55,6 +94,15 @@ export class ProfileComponent implements OnInit {
         this.toastrService.info(`"${channel.channel}" has been successfully updated`);
       }, this.handleHttpError);
     }
+  }
+
+  updatePassword() {
+    const values = this.passwordForm.value;
+
+    this.authService.updatePassword(values.newPassword).subscribe(() => {
+      this.toastrService.info(`Password has been successfully updated`);
+      this.clearPassword();
+    }, this.handleHttpError);
   }
 
   remove(id: number) {
