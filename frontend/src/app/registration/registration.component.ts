@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
@@ -27,25 +27,25 @@ export class RegistrationComponent implements OnInit {
     return this.form.controls.login;
   }
 
-  get loginErrorsMap() {
+  get loginErrorsMap(): Record<string, string> {
     return {
       required: 'Login is required',
     };
   }
 
   get password() {
-    return new Proxy(this.form.controls.newPassword, {
-      get(target, key) {
+    return new Proxy(this.form.controls.password, {
+      get(target, key: keyof AbstractControl) {
         if (key === 'errors') {
           const first = Object.keys(target.errors ?? [])?.[0];
           return { [first]: target.errors?.[first] };
         }
-        return target.errors!;
+        return target[key];
       },
     });
   }
 
-  get passwordErrorsMap() {
+  get passwordErrorsMap(): Record<string, string> {
     return {
       required: 'Password is required',
       minlength: 'Password must be 8 characters or longer',

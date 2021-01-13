@@ -20,7 +20,7 @@ export class AuthComponent implements OnInit {
     return this.form.controls.login;
   }
 
-  get loginErrorsMap() {
+  get loginErrorsMap(): Record<string, string> {
     return {
       required: 'Login is required',
     };
@@ -30,7 +30,7 @@ export class AuthComponent implements OnInit {
     return this.form.controls.password;
   }
 
-  get passwordErrorsMap() {
+  get passwordErrorsMap(): Record<string, string> {
     return {
       required: 'Password is required',
     };

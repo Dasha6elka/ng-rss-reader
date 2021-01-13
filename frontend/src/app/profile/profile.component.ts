@@ -1,6 +1,6 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { AuthService } from '../services/auth.service';
 import { ChannelService } from '../services/channel.service';
@@ -21,6 +21,7 @@ export class ProfileComponent implements OnInit {
 
   passwordForm = new FormGroup({
     newPassword: new FormControl('', [
+      Validators.required,
       Validators.minLength(this.PASSWORD_MIN_LENGTH),
       Validators.pattern(this.PASSWORD_REG_EXP),
     ]),
@@ -35,18 +36,19 @@ export class ProfileComponent implements OnInit {
 
   get password() {
     return new Proxy(this.passwordForm.controls.newPassword, {
-      get(target, key) {
+      get(target, key: keyof AbstractControl) {
         if (key === 'errors') {
           const first = Object.keys(target.errors ?? [])?.[0];
           return { [first]: target.errors?.[first] };
         }
-        return target.errors!;
+        return target[key];
       },
     });
   }
 
-  get passwordErrorsMap() {
+  get passwordErrorsMap(): Record<string, string> {
     return {
+      required: 'Password is required',
       minlength: 'Password must be 8 characters or longer',
       pattern:
         'Password does not match pattern: must contain at least 1 lowercase alphabetical character, must contain at least 1 uppercase alphabetical character, must contain at least 1 numeric character',
