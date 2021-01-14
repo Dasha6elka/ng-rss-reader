@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ChannelService {
-  private readonly PATH = 'http://localhost:5000';
+  private readonly PATH = environment.apiUrl;
 
   constructor(private httpClient: HttpClient) {}
 

@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly PATH = 'http://localhost:5000';
+  private readonly PATH = environment.apiUrl;
 
   loggedIn$ = new BehaviorSubject<boolean>(false);
 
